@@ -13,7 +13,9 @@
 
 
 This fork makes it possible to enter a custom value that does not exist in the dropdown. Similar to a standard input control.
-
+The following Inputs has been added
+* [customValue]="true"
+* [openOnFocus]="false"
 ---
 
 ## Versions
