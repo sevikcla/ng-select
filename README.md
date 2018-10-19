@@ -12,6 +12,8 @@
 # Angular ng-select - Lightweight all in one UI Select, Multiselect and Autocomplete
 See [Demos](https://ng-select.github.io/ng-select) or try in [Stackblitz](https://stackblitz.com/edit/ng-select?file=app%2Fapp.component.ts)
 
+This fork makes it possible to enter a custom value that does not exist in the dropdown. Similar to a standard input control.
+
 ---
 
 ## Versions
