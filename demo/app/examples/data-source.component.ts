@@ -12,10 +12,36 @@ import { Observable } from 'rxjs';
             observable when using angular <b> | async</b> pipe
         </p>
         ---js
-        people$: Observable<Person[]>;
-        ngOnInit() {
-            this.people$ = this.dataService.getPeople();
-        }
+       
+        
+        <h3>Custom Value</h3>
+        
+        ---
+        ---html,true
+
+
+
+        <ng-select [items]="people$ | async"
+                   bindLabel="name"
+                   bindValue="id"
+                   [customValue]="true"
+                   [openOnFocus]="false"
+                   placeholder="Enter value..."
+                   [(ngModel)]="selectedPersonId">
+        </ng-select>
+        ---
+        <br />Selected: {{selectedPersonId}}
+        <br />Selected: {{selectedPersonId?.name}}
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+       
+        <hr />
         ---
         ---html,true
         <ng-select [items]="people$ | async"
@@ -32,11 +58,7 @@ import { Observable } from 'rxjs';
         </p>
         ---js
         people: Person[] = [];
-        ngOnInit() {
-            this.dataService.getPeople().subscribe(people => {
-                this.people = people
-            });
-        }
+      
         ---
         ---html,true
         <ng-select [items]="people"
@@ -68,18 +90,20 @@ import { Observable } from 'rxjs';
         <button type="button" class="btn btn-secondary btn-sm" (click)="toggleDisabled()">Toggle disabled</button>
         <hr/>
         ---html,true
+        <!--
         <ng-select [(ngModel)]="selectedCarId">
             <ng-option *ngFor="let car of cars" [value]="car.id" [disabled]="car.disabled" >{{car.name}}</ng-option>
             <ng-option [value]="'custom'">Custom</ng-option>
         </ng-select>
         ---
         <br />Selected car ID: {{selectedCarId | json}}
+        -->
     `
 })
 export class DataSourceComponent {
     people$: Observable<Person[]>;
     people: Person[] = [];
-    selectedPersonId = '5a15b13c36e7a7f00cf0d7cb';
+    selectedPersonId = null;//'5a15b13c36e7a7f00cf0d7cb';
     selectedPersonId2 = '5a15b13c36e7a7f00cf0d7cb';
 
     selectedSimpleItem = 'Two';

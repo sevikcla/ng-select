@@ -4,6 +4,21 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
     selector: 'select-tags',
     changeDetection: ChangeDetectionStrategy.Default,
     template: `
+
+    <label>Custom value</label>
+    ---html,true
+    <ng-select [items]="[]"
+            [customValue] = "true"
+            [(ngModel)]="selectedCompany">
+    </ng-select>
+    ---
+    <p>
+        Selected value: {{selectedCompany | json}}
+    </p>
+    <hr>
+
+
+
         <label>Default tags</label>
         ---html,true
         <ng-select [items]="[]"
