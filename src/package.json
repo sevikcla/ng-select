@@ -1,11 +1,14 @@
 {
   "$schema": "../node_modules/ng-packagr/package.schema.json",
-  "name": "@ng-select/ng-select",
-  "version": "2.10.5",
-  "description": "Angular ng-select - All in One UI Select, Multiselect and Autocomplete",
-  "author": "@ng-select/ng-select",
+  "name": "@sevikcla/ng-select",
+  "version": "1.0.5",
+  "description": "Fork of Angular ng-select - All in One UI Select, Multiselect and Autocomplete",
+  "author": "sevikcla",
   "license": "MIT",
-  "repository": "git@github.com:ng-select/ng-select.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sevikcla/ng-select.git"
+  },
   "engines": {
     "node": ">= 6.9.0",
     "npm": ">= 3.0.0"
@@ -18,7 +21,8 @@
     "multiselect",
     "autocomplete",
     "angular2",
-    "angular4"
+    "angular4",
+    "netlang"
   ],
   "peerDependencies": {
     "@angular/common": ">=6.0.0 <7.0.0",
