@@ -597,6 +597,9 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         }
 
         const validateBinding = (item: any): boolean => {
+            if(this.customValue) {
+                return true;
+            } 
             if (!isDefined(this.compareWith) && isObject(item) && this.bindValue) {
                 this._console.warn(`Binding object(${JSON.stringify(item)}) with bindValue is not allowed.`);
                 return false;
@@ -616,24 +619,35 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
     }
 
     private _handleWriteValue(ngModel: any | any[]) {
+       
         if (!this._isValidWriteValue(ngModel)) {
             return
         }
 
         const select = (val: any) => {
+           
             let item = this.itemsList.findItem(val);
             if (item) {
                 this.itemsList.select(item);
             } else {
                 const isValObject = isObject(val);
                 const isPrimitive = !isValObject && !this.bindValue;
+                console.log(val);
                 if ((isValObject || isPrimitive)) {
                     this.itemsList.select(this.itemsList.mapItem(val, null));
                 } else if (this.bindValue) {
-                    item = {
-                        [this.bindLabel]: null,
-                        [this.bindValue]: val
-                    };
+                   if(this.customValue) {
+                        item = {
+                            [this.bindLabel]: val,
+                            [this.bindValue]: "custom_value",
+                        };
+                   }else {
+                        item = {
+                            [this.bindLabel]: null,
+                            [this.bindValue]: val
+                        };
+                    }
+                     
                     this.itemsList.select(this.itemsList.mapItem(item, null));
                 }
             }
@@ -673,7 +687,6 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
 
     private _updateNgModel() {
        
-
         const model = [];
         for (const item of this.selectedItems) {
             if (this.bindValue) {
@@ -702,6 +715,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
             this.changeEvent.emit(selected[0]);
         }
 
+        
         this._cd.markForCheck();
     }
 

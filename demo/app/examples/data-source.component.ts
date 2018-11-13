@@ -40,6 +40,15 @@ import { Observable } from 'rxjs';
         <br />
         <br />
 
+        <ng-select [items]="people$ | async"
+        bindLabel="name"
+        bindValue="id"
+        [customValue]="true"
+        [openOnFocus]="false"
+        placeholder="Enter value..."
+        [(ngModel)]="testvalue">
+        </ng-select>
+
        
         <hr />
         ---
@@ -105,6 +114,7 @@ export class DataSourceComponent {
     people: Person[] = [];
     selectedPersonId = null;//'5a15b13c36e7a7f00cf0d7cb';
     selectedPersonId2 = '5a15b13c36e7a7f00cf0d7cb';
+    testvalue="hello world";
 
     selectedSimpleItem = 'Two';
     simpleItems = [];
