@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 
         <ng-select [items]="people$ | async"
                    bindLabel="name"
-                   bindValue="id"
+                   bindValue ="id"
                    [customValue]="true"
                    [openOnFocus]="false"
                    placeholder="Enter value..."
@@ -38,17 +38,19 @@ import { Observable } from 'rxjs';
         <br />
         <br />
         <br />
+        <button (click)="setNow()" >Set value now</button>
         <br />
-
+        <br />
         <ng-select [items]="people$ | async"
         bindLabel="name"
-        bindValue="id"
         [customValue]="true"
         [openOnFocus]="false"
         placeholder="Enter value..."
-        [(ngModel)]="testvalue">
+        [(ngModel)]="testvalue"
+        (change)="dataChanged($event)">
         </ng-select>
-
+<br/>
+{{daEvent}}
        
         <hr />
         ---
@@ -112,14 +114,14 @@ import { Observable } from 'rxjs';
 export class DataSourceComponent {
     people$: Observable<Person[]>;
     people: Person[] = [];
-    selectedPersonId = null;//'5a15b13c36e7a7f00cf0d7cb';
+    selectedPersonId = '5a15b13c36e7a7f00cf0d7cb';
     selectedPersonId2 = '5a15b13c36e7a7f00cf0d7cb';
-    testvalue="hello world";
+    testvalue="skit-på-dig";
 
     selectedSimpleItem = 'Two';
     simpleItems = [];
     disable = true;
-
+    daEvent='';
     selectedCarId = 3;
     cars = [
         { id: 1, name: 'Volvo' },
@@ -139,6 +141,15 @@ export class DataSourceComponent {
     toggleDisabled() {
         const car: any = this.cars[1];
         car.disabled = !car.disabled;
+    }
+
+    dataChanged(e: any): void {
+       this.daEvent = e;
+    }
+
+    setNow() {
+        this.testvalue = "ÅNEJ";
+
     }
 }
 
