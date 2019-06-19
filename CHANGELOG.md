@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/sevikcla/ng-select/compare/v2.10.5...v1.1.0) (2019-06-19)
+
+
+### Features
+
+* **openOnEnter:** allow to configure whether enter opens dropdown ([fe9d990](https://github.com/sevikcla/ng-select/commit/fe9d990)), closes [#878](https://github.com/sevikcla/ng-select/issues/878)
+
+
+
 <a name="2.10.5"></a>
 ## [2.10.5](https://github.com/ng-select/ng-select/compare/v2.10.4...v2.10.5) (2018-10-17)
 
