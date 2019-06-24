@@ -76,6 +76,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
 
     // inputs
     @Input() items: any[] = [];
+    @Input() subItems: any[] = [];
     @Input() bindLabel: string;
     @Input() bindValue: string;
     @Input() clearable = true;
@@ -93,6 +94,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
     @Input() hideSelected = false;
     @Input() selectOnTab = false;
     @Input() openOnEnter: boolean;
+    @Input() openOnDot: boolean;
     @Input() maxSelectedItems: number;
     @Input() groupBy: string | Function;
     @Input() groupValue: Function;
@@ -178,6 +180,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
     private readonly _keyPress$ = new Subject<string>();
     private _onChange = (_: NgOption) => { };
     private _onTouched = () => { };
+    private currentLevel = 0;
 
     clearItem = (item: any) => {
         const option = this.selectedItems.find(x => x.value === item);
@@ -218,8 +221,12 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         if (changes.multiple) {
             this.itemsList.clearSelected();
         }
-        if (changes.items) {
+        if (changes.items && !(this.currentLevel > 0)) {
             this._setItems(changes.items.currentValue || []);
+        }
+        if(changes.subItems) {
+            this._setItems(changes.subItems.currentValue || []);
+            this.itemsList.resetFilteredItems();
         }
         if (changes.isOpen) {
             this._manualOpen = true;
@@ -252,6 +259,10 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
                     break;
                 case KeyCode.Enter:
                     this._handleEnter($event);
+                    break;
+                case KeyCode.Dot:
+                    this._handleDot($event);
+                  
                     break;
                 case KeyCode.Tab:
                     this._handleTab($event);
@@ -323,6 +334,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
             this.clearModel();
         }
         this._clearSearch();
+        this.currentLevel = 0;
         this.focus();
         if (this._isTypeahead) {
             this.typeahead.next(null);
@@ -379,6 +391,14 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
             return;
         }
 
+        if((this.itemsList.selectedItems.length > 0 && this.itemsList.selectedItems[0].hasChild) || this.currentLevel > 0)  {
+            this.currentLevel = 1;
+            this._setItems(this.subItems || []);
+        }
+        else {
+            this._setItems(this.items || []);
+        }
+
         this.isOpen = true;
         
         this.itemsList.markSelectedOrDefault(this.markFirst);
@@ -421,23 +441,43 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         if (!item.selected) {
             this.itemsList.select(item);
            
-            if (this.clearSearchOnAdd) {
+            if (this.clearSearchOnAdd && this.currentLevel == 0) {
                 this._clearSearch();
             }
 
             if (this.multiple) {
                 this.addEvent.emit(item.value);
             }
-            this._updateNgModel();
+            
 
             if(this.customValue) {
-                this.filterValue = item.label;
+                if(this.currentLevel == 1) {
+                    var i = this.filterValue.indexOf(".");
+                    if(i > 0) {
+                        this.filterValue = this.filterValue.substring(0,i)+"."+item.label;
+                    }else {
+                        this.filterValue = this.filterValue+"."+item.label;
+                    }
+                }else {
+                    this.filterValue = item.label;
+                }
             }
+            this._updateNgModel();
         }
-
-        if (this.closeOnSelect || this.itemsList.noItemsToSelect) {
+     
+        if(item.hasChild) {
+            this.currentLevel++;
+            this._setItems(this.subItems || []);       
+            this.itemsList.resetFilteredItems();
+            this.itemsList.markSelectedOrDefault(this.markFirst);
+            this._cd.markForCheck();
+            this.detectChanges();
+        }
+        else if ((this.closeOnSelect || this.itemsList.noItemsToSelect)) {
             this.close();
         }
+
+      
     }
 
     focus() {
@@ -503,7 +543,21 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         if (this._isTypeahead) {
             this.typeahead.next(this.filterValue);
         } else {
-            this.itemsList.filter(this.filterValue);
+            if(this.currentLevel > 0) {
+                var i = this.filterValue.indexOf(".");
+                if(i > -1) {
+                    var subFilter = this.filterValue.substring(i+1,this.filterValue.length);
+                    this.itemsList.filter(subFilter);
+                }
+                else {
+                    this.currentLevel = 0;
+                    this._setItems(this.items || []);
+                    this.itemsList.filter(this.filterValue);
+                }
+               
+            }else {
+                this.itemsList.filter(this.filterValue);
+            }
             if (this.isOpen) {
                 this.itemsList.markSelectedOrDefault(this.markFirst);
             }
@@ -759,6 +813,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         if (this.filterValue==null) {
             return;
         }
+      
         this.filterValue = null;
         this.itemsList.resetFilteredItems();
     }
@@ -793,6 +848,20 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
             }
         } else {
             this.close();
+        }
+    }
+
+    private _handleDot($event: KeyboardEvent) {
+        if(this.openOnDot) {
+            if(this.customValue) {
+                //this._clearSearch();
+                this.itemsList.resetFilteredItems();
+             }
+            this._openByArrow = true;
+            this.open();
+       //   $event.preventDefault();
+      //    $event.stopPropagation();
+          $event.char;
         }
     }
 

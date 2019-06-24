@@ -20,8 +20,13 @@ export class NgOptionComponent implements OnChanges {
     get disabled() { return this._disabled; }
     set disabled(value: any) { this._disabled = this._isDisabled(value) }
 
+    @Input()
+    get hasChild() { return this._hasChild; }
+    set hasChild(value: any) { this._hasChild = value }
+
     readonly stateChange$ = new Subject<{ value: any, disabled: boolean }>();
     private _disabled = false;
+    private _hasChild = false;
 
     constructor(public elementRef: ElementRef) { }
 
@@ -37,4 +42,6 @@ export class NgOptionComponent implements OnChanges {
     private _isDisabled(value) {
         return value != null && `${value}` !== 'false';
     }
+
+    
 }

@@ -230,6 +230,7 @@ export class ItemsList {
             label: isDefined(label) ? label.toString() : '',
             value: value,
             disabled: item.disabled,
+            hasChild: item.hasChild,
             htmlId: newId()
         };
     }

@@ -21,12 +21,14 @@ import { Observable } from 'rxjs';
 
 
 
-        <ng-select [items]="people$ | async"
+        <ng-select [items]="mainData"
                    bindLabel="name"
                    bindValue ="id"
                    [customValue]="true"
                    [openOnFocus]="false"
                    placeholder="Enter value..."
+                   [openOnDot]="true"
+                   [subItems]="subs"
                    [(ngModel)]="selectedPersonId">
         </ng-select>
         ---
@@ -128,6 +130,22 @@ export class DataSourceComponent {
         { id: 2, name: 'Saab', disabled: true },
         { id: 3, name: 'Opel' },
         { id: 4, name: 'Audi' },
+    ]
+
+
+    mainData = [
+        { id: 1, name: 'obj1', hasChild:true },
+        { id: 2, name: 'myStr' },
+        { id: 3, name: 'myvar' },
+        { id: 4, name: 'obj2' , hasChild:true},
+    ]
+
+
+    subs = [
+        { id: 1, name: 'next()' },
+        { id: 2, name: 'toString()' },
+        { id: 3, name: 'value()' },
+        { id: 4, name: 'killThemAll()' },
     ]
 
     constructor(private dataService: DataService) { }

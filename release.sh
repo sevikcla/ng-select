@@ -7,7 +7,7 @@ cd ..
 
 # build lib
 yarn run build
-
+yar
 # push tags
 git push --follow-tags origin master
 
