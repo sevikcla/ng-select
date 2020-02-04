@@ -224,7 +224,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         if (changes.items && !(this.currentLevel > 0)) {
             this._setItems(changes.items.currentValue || []);
         }
-        if(changes.subItems) {
+        if(changes.subItems && this.currentLevel > 0 ) {
             this._setItems(changes.subItems.currentValue || []);
             this.itemsList.resetFilteredItems();
         }
@@ -855,6 +855,8 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         if(this.openOnDot) {
             if(this.customValue) {
                 //this._clearSearch();
+                //Changed to support DOT on backspace
+                this.toggleItem(this.itemsList.markedItem);
                 this.itemsList.resetFilteredItems();
              }
             this._openByArrow = true;
@@ -883,11 +885,20 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
     }
 
     private _handleSpace($event: KeyboardEvent) {
+     //ALLOW SPACE
+     
+     
+        if($event.charCode == 2) {
+          return;
+      }
+        /*
         if (this.isOpen || this._manualOpen) {
             return;
         }
+     
         this.open();
         $event.preventDefault();
+        */
     }
 
     private _handleArrowDown($event: KeyboardEvent) {
